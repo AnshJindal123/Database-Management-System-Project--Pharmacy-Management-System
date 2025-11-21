@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h1>🏥 Pharmacy Management System</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+            <a href="#" onclick="showSection('patients')">Patients</a>
+            <a href="#" onclick="showSection('doctors')">Doctors</a>
+            <a href="#" onclick="showSection('drugs')">Drugs</a>
+            <a href="#" onclick="showSection('pharmacies')">Pharmacies</a>
+            <a href="#" onclick="showSection('employees')">Employees</a>
+            <a href="#" onclick="showSection('bills')">Bills</a>
+            <a href="#" onclick="showSection('reports')">Reports</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <h2>Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <p id="totalPatients" class="stat-number">Loading...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Doctors</h3>
+                    <p id="totalDoctors" class="stat-number">Loading...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Pharmacies</h3>
+                    <p id="totalPharmacies" class="stat-number">Loading...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <p id="totalRevenue" class="stat-number">Loading...</p>
+                </div>
+            </div>
+            <div class="recent-activity">
+                <h3>Recent Bills</h3>
+                <table id="recentBillsTable">
+                    <thead>
+                        <tr>
+                            <th>Bill ID</th>
+                            <th>Date</th>
+                            <th>Patient</th>
+                            <th>Pharmacy</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentBillsBody">
+                        <tr><td colspan="5">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Patients Section -->
+        <section id="patients" class="section">
+            <h2>Patient Management</h2>
+            <button onclick="showAddPatientForm()" class="btn-primary">Add New Patient</button>
+            
+            <div id="addPatientForm" class="form-container" style="display: none;">
+                <h3>Add New Patient</h3>
+                <form onsubmit="addPatient(event)">
+                    <input type="text" id="patientId" placeholder="Patient ID (e.g., P004)" required>
+                    <input type="text" id="patientFirstName" placeholder="First Name" required>
+                    <input type="text" id="patientLastName" placeholder="Last Name" required>
+                    <select id="patientSex" required>
+                        <option value="">Select Sex</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="O">Other</option>
+                    </select>
+                    <input type="text" id="patientAddress" placeholder="Address">
+                    <input type="text" id="patientContact" placeholder="Contact Number">
+                    <input type="text" id="patientInsurance" placeholder="Insurance Info">
+                    <button type="submit" class="btn-primary">Add Patient</button>
+                    <button type="button" onclick="hideAddPatientForm()" class="btn-secondary">Cancel</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table id="patientsTable">
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Name</th>
+                            <th>Sex</th>
+                            <th>Address</th>
+                            <th>Contacts</th>
+                            <th>Insurance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientsBody">
+                        <tr><td colspan="7">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Doctors Section -->
+        <section id="doctors" class="section">
+            <h2>Doctor Management</h2>
+            <button onclick="showAddDoctorForm()" class="btn-primary">Add New Doctor</button>
+            
+            <div id="addDoctorForm" class="form-container" style="display: none;">
+                <h3>Add New Doctor</h3>
+                <form onsubmit="addDoctor(event)">
+                    <input type="text" id="doctorId" placeholder="Doctor ID (e.g., D004)" required>
+                    <input type="text" id="doctorName" placeholder="Doctor Name" required>
+                    <input type="text" id="doctorSpeciality" placeholder="Speciality (comma-separated for multiple)">
+                    <button type="submit" class="btn-primary">Add Doctor</button>
+                    <button type="button" onclick="hideAddDoctorForm()" class="btn-secondary">Cancel</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table id="doctorsTable">
+                    <thead>
+                        <tr>
+                            <th>Doctor ID</th>
+                            <th>Name</th>
+                            <th>Specialities</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="doctorsBody">
+                        <tr><td colspan="4">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Drugs Section -->
+        <section id="drugs" class="section">
+            <h2>Drug Management</h2>
+            <button onclick="showAddDrugForm()" class="btn-primary">Add New Drug</button>
+            
+            <div id="addDrugForm" class="form-container" style="display: none;">
+                <h3>Add New Drug</h3>
+                <form onsubmit="addDrug(event)">
+                    <input type="text" id="drugName" placeholder="Drug Name" required>
+                    <textarea id="drugDescription" placeholder="Description" rows="3"></textarea>
+                    <select id="drugManufacturer" required>
+                        <option value="">Select Manufacturer</option>
+                        <option value="C001">PharmaCorp Ltd</option>
+                        <option value="C002">MediLife Industries</option>
+                        <option value="C003">HealthPlus Pharma</option>
+                    </select>
+                    <button type="submit" class="btn-primary">Add Drug</button>
+                    <button type="button" onclick="hideAddDrugForm()" class="btn-secondary">Cancel</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table id="drugsTable">
+                    <thead>
+                        <tr>
+                            <th>Drug Name</th>
+                            <th>Description</th>
+                            <th>Manufacturer</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="drugsBody">
+                        <tr><td colspan="4">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Pharmacies Section -->
+        <section id="pharmacies" class="section">
+            <h2>Pharmacy Management</h2>
+            <button onclick="showAddPharmacyForm()" class="btn-primary">Add New Pharmacy</button>
+            
+            <div id="addPharmacyForm" class="form-container" style="display: none;">
+                <h3>Add New Pharmacy</h3>
+                <form onsubmit="addPharmacy(event)">
+                    <input type="text" id="pharmacyId" placeholder="Pharmacy ID (e.g., PH004)" required>
+                    <input type="text" id="pharmacyName" placeholder="Pharmacy Name" required>
+                    <input type="text" id="pharmacyAddress" placeholder="Address">
+                    <input type="text" id="pharmacyFax" placeholder="Fax Number">
+                    <button type="submit" class="btn-primary">Add Pharmacy</button>
+                    <button type="button" onclick="hideAddPharmacyForm()" class="btn-secondary">Cancel</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table id="pharmaciesTable">
+                    <thead>
+                        <tr>
+                            <th>Pharmacy ID</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Fax</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pharmaciesBody">
+                        <tr><td colspan="5">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Employees Section -->
+        <section id="employees" class="section">
+            <h2>Employee Management</h2>
+            <button onclick="showAddEmployeeForm()" class="btn-primary">Add New Employee</button>
+            
+            <div id="addEmployeeForm" class="form-container" style="display: none;">
+                <h3>Add New Employee</h3>
+                <form onsubmit="addEmployee(event)">
+                    <input type="text" id="employeeId" placeholder="Employee ID (e.g., E005)" required>
+                    <input type="text" id="employeeFirstName" placeholder="First Name" required>
+                    <input type="text" id="employeeLastName" placeholder="Last Name" required>
+                    <select id="employeeSex" required>
+                        <option value="">Select Sex</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="O">Other</option>
+                    </select>
+                    <input type="number" id="employeeSalary" placeholder="Salary" step="0.01" required>
+                    <button type="submit" class="btn-primary">Add Employee</button>
+                    <button type="button" onclick="hideAddEmployeeForm()" class="btn-secondary">Cancel</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table id="employeesTable">
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Sex</th>
+                            <th>Salary</th>
+                            <th>Contacts</th>
+                            <th>Work Info</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeesBody">
+                        <tr><td colspan="6">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Bills Section -->
+        <section id="bills" class="section">
+            <h2>Bill Management</h2>
+            <button onclick="showAddBillForm()" class="btn-primary">Add New Bill</button>
+            
+            <div id="addBillForm" class="form-container" style="display: none;">
+                <h3>Add New Bill</h3>
+                <form onsubmit="addBill(event)">
+                    <input type="text" id="billId" placeholder="Bill ID (e.g., B005)" required>
+                    <input type="date" id="billDate" required>
+                    <input type="number" id="billAmount" placeholder="Total Amount" step="0.01" required>
+                    <select id="billPaymentMethod" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="Debit Card">Debit Card</option>
+                        <option value="Insurance">Insurance</option>
+                    </select>
+                    <select id="billPatient" required>
+                        <option value="">Select Patient</option>
+                    </select>
+                    <select id="billPharmacy" required>
+                        <option value="">Select Pharmacy</option>
+                    </select>
+                    <button type="submit" class="btn-primary">Add Bill</button>
+                    <button type="button" onclick="hideAddBillForm()" class="btn-secondary">Cancel</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table id="billsTable">
+                    <thead>
+                        <tr>
+                            <th>Bill ID</th>
+                            <th>Date</th>
+                            <th>Patient</th>
+                            <th>Pharmacy</th>
+                            <th>Amount</th>
+                            <th>Payment Method</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billsBody">
+                        <tr><td colspan="6">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="section">
+            <h2>Reports & Analytics</h2>
+            
+            <div class="report-controls">
+                <h3>Monthly Sales Report</h3>
+                <div class="form-inline">
+                    <select id="reportMonth">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <input type="number" id="reportYear" placeholder="Year" value="2025" min="2020" max="2030">
+                    <button onclick="generateMonthlySalesReport()" class="btn-primary">Generate Report</button>
+                </div>
+            </div>
+
+            <div class="report-controls">
+                <h3>Drugs Below Price</h3>
+                <div class="form-inline">
+                    <input type="number" id="priceThreshold" placeholder="Price Threshold" step="0.01" value="10.00">
+                    <button onclick="getDrugsBelowPrice()" class="btn-primary">Search</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h3>Report Results</h3>
+                <table id="reportsTable">
+                    <thead id="reportsTableHead">
+                        <tr><th>Select a report to view results</th></tr>
+                    </thead>
+                    <tbody id="reportsBody">
+                        <tr><td>No data</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
